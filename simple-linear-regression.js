@@ -30,12 +30,16 @@ const variance = (values, mean) => sum(values.map(x => Math.pow((x - mean), 2)))
 
 const covariance = (x, mean_x, y, mean_y) => sum(x.map((_, i) => (x[i] - mean_x) * (y[i] - mean_y)))
 
+const coefficients = dataset => {
+  const x = dataset.map(row => row[0])
+  const y = dataset.map(row => row[1])
+  const [mean_x, mean_y] = [mean(x), mean(y)]
+  // coefficients m and t are also often referred to as B1 and B0
+  const m = covariance(x, mean_x, y, mean_y) / variance(x, mean_x)
+  const t = mean_y - m * mean_x
+  return [t, m]
+}
+
 const dataset = [[1, 1], [2, 3], [4, 3], [3, 2], [5, 5]]
-const x = dataset.map(row => row[0])
-const y = dataset.map(row => row[1])
-const [mean_x, mean_y] = [mean(x), mean(y)]
-const [var_x, var_y] = [variance(x, mean_x), variance(y, mean_y)]
-const covar = covariance(x, mean_x, y, mean_y)
-console.log(`x stats: mean=${mean_x} variance=${var_x}`)
-console.log(`y stats: mean=${mean_y} variance=${var_y}`)
-console.log(`Covariance: ${covar}`)
+const [t, m] = coefficients(dataset)
+console.log(`Coefficients: B0/t=${t}, B1/m=${m}`)
