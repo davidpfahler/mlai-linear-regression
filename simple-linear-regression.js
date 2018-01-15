@@ -21,3 +21,17 @@ if (!fs.existsSync(filename)) {
     file.write(`${x};${y}\n`)
   }).on('end', () => file.end()))
 }
+
+const sum = values => values.reduce((value, sum = 0) => sum + value)
+
+const mean = values => sum(values) / values.length
+
+const variance = (values, mean) => sum(values.map(x => Math.pow((x - mean), 2)))
+
+const dataset = [[1, 1], [2, 3], [4, 3], [3, 2], [5, 5]]
+const x = dataset.map(row => row[0])
+const y = dataset.map(row => row[1])
+const [mean_x, mean_y] = [mean(x), mean(y)]
+const [var_x, var_y] = [variance(x, mean_x), variance(y, mean_y)]
+console.log(`x stats: mean=${mean_x} variance=${var_x}`)
+console.log(`y stats: mean=${mean_y} variance=${var_y}`)
