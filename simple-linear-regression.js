@@ -40,6 +40,28 @@ const coefficients = dataset => {
   return [t, m]
 }
 
+const simple_linear_regression = (train, test) => {
+  const [t, m] = coefficients(train)
+  return test.map(row => m * row[0] + t)
+}
+
+const rmse = (actual, predicted) => {
+  let sum_error = 0
+  for (let i=0; i < actual.length; i++) {
+    const prediction_error = predicted[i] - actual[i]
+    sum_error += Math.pow(prediction_error, 2)
+  }
+  return Math.sqrt(sum_error / actual.length)
+}
+
+const evaluate_algorithm = (dataset, algorithm) => {
+  const test_set = dataset.map(row => [row[0]])
+  const predicted = algorithm(dataset, test_set)
+  const actual = dataset.map(row => row[1])
+  console.log(predicted)
+  return rmse(actual, predicted)
+}
+
 const dataset = [[1, 1], [2, 3], [4, 3], [3, 2], [5, 5]]
-const [t, m] = coefficients(dataset)
-console.log(`Coefficients: B0/t=${t}, B1/m=${m}`)
+const rmserr = evaluate_algorithm(dataset, simple_linear_regression)
+console.log(`RMSE: ${rmserr}`)
