@@ -54,14 +54,31 @@ const rmse = (actual, predicted) => {
   return Math.sqrt(sum_error / actual.length)
 }
 
-const evaluate_algorithm = (dataset, algorithm) => {
-  const test_set = dataset.map(row => [row[0]])
-  const predicted = algorithm(dataset, test_set)
-  const actual = dataset.map(row => row[1])
-  console.log(predicted)
+const evaluate_algorithm = (train, test, algorithm) => {
+  const test_set = test.map(row => [row[0]])
+  const predicted = algorithm(train, test_set)
+  const actual = test.map(row => row[1])
   return rmse(actual, predicted)
 }
 
-const dataset = [[1, 1], [2, 3], [4, 3], [3, 2], [5, 5]]
-const rmserr = evaluate_algorithm(dataset, simple_linear_regression)
+const split = (dataset, factor) => {
+  const trainnumber = Math.round(dataset.length * factor)
+  const train = []
+  while (train.length < trainnumber) {
+    const index = Math.floor(Math.random()*dataset.length)
+    if (train.includes(dataset[index])) continue
+    train.push(dataset[index])
+  }
+  const test = dataset.filter(row => !train.includes(row))
+  return [train, test]
+}
+
+const load_dataset = filename => fs.readFileSync(filename, 'utf8')
+  .split('\n')
+  .filter(row => row !== '')
+  .map(row => row.split(';').map(col => parseFloat(col)))
+
+const dataset = load_dataset(filename)
+const [train, test] = split(dataset, .6)
+const rmserr = evaluate_algorithm(train, test, simple_linear_regression)
 console.log(`RMSE: ${rmserr}`)
