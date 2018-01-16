@@ -1,6 +1,6 @@
 # ML&AI linear regression
 
-The purpose of this repository is to teach myself the linear regression algorithm by creating a simple exmaples.
+The purpose of this repository is to teach myself the linear regression algorithm by creating a simple algorithm. I went with JavaScript first, as this is the language I am most comfortable with.
 
 ## Resources
 * [Explain Like I'm Five: Linear regression, what is it an dhow do they do it ?](https://www.reddit.com/r/explainlikeimfive/comments/16xlsd/eli5_linear_regression_what_is_it_an_dhow_do_they/)
