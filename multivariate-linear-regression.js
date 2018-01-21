@@ -58,8 +58,8 @@ function cross_validation_split (dataset, n_folds) {
 
     while (fold.length < foldsize) {
       const index = Math.floor(Math.random() * (dataset_copy.length - 1))
-      if (!dataset_copy[index]) debugger
-      fold.push(dataset_copy.pop(index))
+      fold.push(dataset_copy[index])
+      dataset_copy.pop(index)
     }
     dataset_split.push(fold)
   }
@@ -79,17 +79,17 @@ function rmse_metric (actual, predicted) {
 
 // Evaluate an algorithm using a cross validation split
 function evaluate_algorithm (dataset, algorithm, n_folds, ...args) {
-  console.log('Evaluating algorithm.')
+  // console.log('Evaluating algorithm.')
 
   const folds = cross_validation_split(dataset, n_folds)
   // console.log('Folding complete.')
 
   return folds.map((fold, i) => {
-    console.log(`\nUsing fold number ${i + 1} as test set.`)
+    // console.log(`\nUsing fold number ${i + 1} as test set.`)
     const train = folds
       .filter(f => f !== fold)
       .reduce((f, set) => [...set, ...f], [])
-    const test = fold.map(row => row.slice(0, row.length - 1))
+    const test = fold.map(row => [...row.slice(0, row.length - 1), undefined])
 
     const predicted = algorithm(train, test, ...args)
     const actual = fold.map(row => row[row.length - 1])
@@ -111,10 +111,10 @@ function predict (row, coefficients) {
 
 // Estimate linear regression coefficients using stochastic gradient descent
 function coefficients_sgd (train, l_rate, n_epoch) {
-  console.log(`Estimating coefficients using stochastic gradient descent.`)
+  // console.log(`Estimating coefficients using stochastic gradient descent.`)
 
   const coefficients = train[0].map(() => 0)
-  console.log(`Initialized coefficients with all zeros.`)
+  // console.log(`Initialized coefficients with all zeros.`)
 
   for (let epoch = 0; epoch < n_epoch; epoch++) {
     // console.log(`Training epoch ${epoch + 1}:\n`)
@@ -132,7 +132,7 @@ function coefficients_sgd (train, l_rate, n_epoch) {
       }
     }
   }
-  console.log(`Estimated coefficients:`, coefficients)
+  // console.log(`Estimated coefficients:`, coefficients)
   return coefficients
 }
 
