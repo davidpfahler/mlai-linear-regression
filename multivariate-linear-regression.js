@@ -47,7 +47,7 @@ function normalize_dataset (dataset, minmax) {
   }))
 }
 
-// Split a dataset info k folds
+// Split a dataset into n folds
 function cross_validation_split (dataset, n_folds) {
   const dataset_split = []
   const dataset_copy = [...dataset]
